@@ -1,0 +1,25 @@
+
+# Manipulação e análise de dados
+pandas
+numpy
+
+# Machine Learning
+scikit-learn
+
+# Dataset UCI
+ucimlrepo
+
+# Qualidade e contratos de dados
+pandera
+
+# Detecção e monitoramento de Drift
+evidently
+
+# Visualização
+matplotlib
+seaborn
+
+# Desenvolvimento e testes
+jupyter
+ipykernel
+pytest

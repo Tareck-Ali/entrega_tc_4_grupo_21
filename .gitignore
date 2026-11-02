@@ -1,0 +1,24 @@
+
+# Ambiente virtual
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Dados locais
+data/raw/
+data/reference/
+data/production/
+data/invalid/
+
+# Arquivos temporários
+*.log
+.DS_Store
+
+# Configurações locais
+.env
