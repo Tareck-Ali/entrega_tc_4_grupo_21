@@ -15,6 +15,10 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 DRIFT_REPORTS_DIR = REPORTS_DIR / "drift"
 MONITORING_REPORTS_DIR = REPORTS_DIR / "monitoring"
 
+MODEL_DIR = PROJECT_ROOT / "artifacts" / "models"
+BASELINE_MODEL_PATH = MODEL_DIR / "baseline_logistic_regression.joblib"
+BASELINE_METRICS_PATH = MONITORING_REPORTS_DIR / "baseline_metrics.json"
+
 # Arquivos de dados
 DATASET_FILENAME = "default_credit_clients_raw.csv"
 RAW_DATASET_PATH = RAW_DATA_DIR / DATASET_FILENAME

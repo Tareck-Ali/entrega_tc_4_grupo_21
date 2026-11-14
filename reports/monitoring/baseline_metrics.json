@@ -1,0 +1,20 @@
+{
+    "model": "Logistic Regression",
+    "reference_records": 21000,
+    "production_records": 9000,
+    "precision": 0.4921190893169877,
+    "recall": 0.5645404319437468,
+    "f1_score": 0.5258479532163742,
+    "roc_auc": 0.7634799958351604,
+    "balanced_accuracy": 0.699519466934921,
+    "confusion_matrix": [
+        [
+            5849,
+            1160
+        ],
+        [
+            867,
+            1124
+        ]
+    ]
+}

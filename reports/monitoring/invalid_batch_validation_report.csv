@@ -1,0 +1,4 @@
+column,check,failure_case,index
+SEX,"isin([1, 2])",3,1
+DEFAULT_NEXT_MONTH,"isin([0, 1])",2,2
+PAY_AMT1,greater_than_or_equal_to(0),-100,0
