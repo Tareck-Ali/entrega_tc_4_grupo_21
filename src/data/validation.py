@@ -73,9 +73,5 @@ credit_schema = pa.DataFrameSchema(
 )
 
 
-def validate_credit_data(df):
-    """
-    Valida os dados de clientes de cartão de crédito.
-    Retorna o DataFrame se todas as regras forem atendidas.
-    """
-    return credit_schema.validate(df)
+def validate_credit_data(df, lazy=False):
+    return credit_schema.validate(df, lazy=lazy)

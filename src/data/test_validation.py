@@ -5,6 +5,7 @@ import pytest
 from src.config import RAW_DATASET_PATH
 from src.data.preprocessing import normalize_column_names
 from src.data.validation import validate_credit_data
+from pandera.errors import SchemaError
 
 
 @pytest.fixture
@@ -24,7 +25,7 @@ def test_negative_payment_fails(valid_data):
     invalid_data = valid_data.copy()
     invalid_data.loc[0, "PAY_AMT1"] = -100
 
-    with pytest.raises(Exception):
+    with pytest.raises(SchemaError):
         validate_credit_data(invalid_data)
 
 
@@ -32,7 +33,7 @@ def test_invalid_target_fails(valid_data):
     invalid_data = valid_data.copy()
     invalid_data.loc[0, "DEFAULT_NEXT_MONTH"] = 2
 
-    with pytest.raises(Exception):
+    with pytest.raises(SchemaError):
         validate_credit_data(invalid_data)
 
 
@@ -40,5 +41,5 @@ def test_invalid_sex_fails(valid_data):
     invalid_data = valid_data.copy()
     invalid_data.loc[0, "SEX"] = 3
 
-    with pytest.raises(Exception):
+    with pytest.raises(SchemaError):
         validate_credit_data(invalid_data)
