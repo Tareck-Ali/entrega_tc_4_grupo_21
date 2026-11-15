@@ -17,7 +17,7 @@ TARGET_COLUMN = "DEFAULT_NEXT_MONTH"
 REFERENCE_PATH = REFERENCE_DATA_DIR / "reference.csv"
 PRODUCTION_PATH = PRODUCTION_DATA_DIR / "production_drift.csv"
 REPORT_PATH = DRIFT_REPORTS_DIR / "data_drift_report.html"
-
+DRIFT_JSON_PATH = DRIFT_REPORTS_DIR / "data_drift_summary.json"
 
 def detect_drift():
     create_project_directories()
@@ -44,6 +44,7 @@ def detect_drift():
     REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     evaluation.save_html(str(REPORT_PATH))
+    evaluation.save_json(str(DRIFT_JSON_PATH))
 
     print("ANÁLISE DE DATA DRIFT CONCLUÍDA")
     print(f"Registros de referência: {len(reference_features)}")

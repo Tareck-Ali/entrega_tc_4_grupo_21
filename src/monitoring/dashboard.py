@@ -9,8 +9,11 @@ from src.config import (
     PREDICTION_LOG_PATH,
     PREDICTION_BATCH_SUMMARY_PATH,
     BASELINE_METRICS_PATH,
+    DRIFT_REPORTS_DIR,
 )
 
+DRIFT_JSON_PATH = DRIFT_REPORTS_DIR / "data_drift_summary.json"
+DRIFT_HTML_PATH = DRIFT_REPORTS_DIR / "data_drift_report.html"
 
 # --------------------------------------------------
 # Configuração da página
@@ -31,6 +34,58 @@ st.caption(
 # --------------------------------------------------
 # Carregamento dos dados
 # --------------------------------------------------
+
+def load_drift_results():
+    with open(DRIFT_JSON_PATH, "r", encoding="utf-8") as file:
+        report_data = json.load(file)
+
+    metrics = report_data.get("metrics", [])
+
+    summary_metric = next(
+        (
+            metric for metric in metrics
+            if metric.get("metric_name", "").startswith(
+                "DriftedColumnsCount"
+            )
+        ),
+        None,
+    )
+
+    if summary_metric is None:
+        raise ValueError("Métrica geral de drift não encontrada.")
+
+    summary = summary_metric["value"]
+    global_threshold = summary_metric["config"]["drift_share"]
+
+    drift_columns = []
+
+    for metric in metrics:
+        config = metric.get("config", {})
+
+        if config.get("type") != "evidently:metric_v2:ValueDrift":
+            continue
+
+        value = metric.get("value")
+        threshold = config.get("threshold", 0.1)
+
+        drift_columns.append({
+            "Variável": config.get("column"),
+            "Método": config.get("method"),
+            "Distância": value,
+            "Limite": threshold,
+            "Status": (
+                "Drift detectado"
+                if value > threshold
+                else "Sem drift"
+            ),
+        })
+
+    return (
+        summary["count"],
+        summary["share"],
+        global_threshold,
+        drift_columns,
+    )
 
 @st.cache_data
 def load_data():
@@ -209,6 +264,69 @@ st.plotly_chart(
     use_container_width=True,
 )
 
+# --------------------------------------------------
+# Data Drift
+# --------------------------------------------------
+
+st.divider()
+st.subheader("7. Monitoramento de Data Drift")
+
+try:
+    drift_count, drift_share, global_threshold, drift_columns = (
+        load_drift_results()
+    )
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric(
+        "Variáveis com drift",
+        int(drift_count),
+    )
+
+    col2.metric(
+        "Proporção de colunas",
+        f"{drift_share:.1%}",
+    )
+
+    col3.metric(
+        "Critério global",
+        f"{global_threshold:.0%}",
+    )
+
+    if drift_share >= global_threshold:
+        st.error("Alerta: critério global de drift atingido.")
+    else:
+        st.info(
+            "O critério global de proporção não foi atingido. "
+            "Isso não significa ausência de drift individual."
+        )
+
+    drift_df = pd.DataFrame(drift_columns)
+
+    st.markdown("**Resultados por variável**")
+
+    st.dataframe(
+        drift_df,
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    if DRIFT_HTML_PATH.exists():
+        with open(DRIFT_HTML_PATH, "rb") as file:
+            report_bytes = file.read()
+
+        st.download_button(
+            label="Baixar relatório completo do Evidently",
+            data=report_bytes,
+            file_name="data_drift_report.html",
+            mime="text/html",
+        )
+
+except FileNotFoundError:
+    st.warning("Relatório de Data Drift ainda não encontrado.")
+
+except (KeyError, ValueError, TypeError) as error:
+    st.error(f"Erro ao interpretar o relatório de drift: {error}")
 
 # --------------------------------------------------
 # Métricas do modelo baseline
