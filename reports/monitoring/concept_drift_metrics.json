@@ -1,0 +1,46 @@
+{
+    "model": "baseline_logistic_regression",
+    "records": 9000,
+    "changed_labels": 1003,
+    "original": {
+        "precision": 0.4921190893169877,
+        "recall": 0.5645404319437468,
+        "f1_score": 0.5258479532163742,
+        "roc_auc": 0.7634799958351604,
+        "balanced_accuracy": 0.699519466934921,
+        "confusion_matrix": [
+            [
+                5849,
+                1160
+            ],
+            [
+                867,
+                1124
+            ]
+        ]
+    },
+    "simulated": {
+        "precision": 0.4702276707530648,
+        "recall": 0.5316831683168317,
+        "f1_score": 0.49907063197026025,
+        "roc_auc": 0.7408226829129905,
+        "balanced_accuracy": 0.6791653663933729,
+        "confusion_matrix": [
+            [
+                5770,
+                1210
+            ],
+            [
+                946,
+                1074
+            ]
+        ]
+    },
+    "variation": {
+        "precision": -0.021891418563922904,
+        "recall": -0.0328572636269151,
+        "f1_score": -0.026777321246113983,
+        "roc_auc": -0.02265731292216988,
+        "balanced_accuracy": -0.02035410054154807
+    }
+}
