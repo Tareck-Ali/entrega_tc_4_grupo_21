@@ -1,9 +1,9 @@
-pandas
+pandas==3.0.6
+evidently==0.7.23
 numpy
 scikit-learn
 ucimlrepo
 pandera
-evidently
 matplotlib
 seaborn
 jupyter
